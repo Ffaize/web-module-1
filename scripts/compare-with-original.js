@@ -10,7 +10,7 @@ const root = path.join(__dirname, "..");
 const originalFile = path.join(root, "original-app.tmp.js");
 
 fs.writeFileSync(originalFile, execSync(`git show ${ORIGINAL_COMMIT}:app.js`, { cwd: root }));
-console.log = () => {}; // silence the original slopify() logging
+console.log = () => {}; // the original app logs a line on every request
 
 const originalApp = require(originalFile);
 const currentApp = require(path.join(root, "app.js"));
