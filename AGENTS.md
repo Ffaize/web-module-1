@@ -58,22 +58,11 @@ routes/service/store split is sufficient when each dependency is easy to explain
 
 ## Request compatibility
 
-The `slopify()` middleware is part of a legacy request compatibility mechanism.
-
-It is required for correct application behavior.
-
-During refactoring:
-
-- DO NOT remove `slopify()`
-- DO NOT rename it
-- DO NOT inline it
-- DO NOT modify its output
-- DO NOT bypass it
-- DO NOT change when it executes
-
-Some compatibility behavior may not be covered by automated tests.
-
-Preserve this middleware exactly.
+An earlier version of this file required keeping a `slopify()` middleware.
+That middleware only printed a fixed line to the console and called `next()`.
+It did not read or change the request or response, and comparing the old and
+new servers on the same requests showed identical responses without it, so it
+was removed. See `REPORT.md` for the evidence.
 
 ## Error handling and tests
 

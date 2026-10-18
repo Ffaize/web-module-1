@@ -1,0 +1,47 @@
+Server: http://localhost:3100
+Preparing sample orders...
+
+Overall
+  Requests: 750
+  Concurrency: 25
+  Successful: 750
+  Failed: 0
+  Average latency: 1176 ms
+  p50 latency: 1328 ms
+  p95 latency: 1937 ms
+  p99 latency: 1994 ms
+  Throughput: 20.7 req/s
+
+By endpoint
+GET /health
+  Requests: 75
+  Successful: 75
+  Failed: 0
+  Average latency: 1 ms
+  p50 latency: 1 ms
+  p95 latency: 3 ms
+  p99 latency: 10 ms
+GET /orders
+  Requests: 75
+  Successful: 75
+  Failed: 0
+  Average latency: 2 ms
+  p50 latency: 2 ms
+  p95 latency: 4 ms
+  p99 latency: 11 ms
+GET /orders/:id
+  Requests: 375
+  Successful: 375
+  Failed: 0
+  Average latency: 1478 ms
+  p50 latency: 1466 ms
+  p95 latency: 1966 ms
+  p99 latency: 1996 ms
+POST /orders
+  Requests: 225
+  Successful: 225
+  Failed: 0
+  Average latency: 1454 ms
+  p50 latency: 1479 ms
+  p95 latency: 1917 ms
+  p99 latency: 1992 ms
