@@ -9,7 +9,7 @@ const API_VERSION = "1.0";
 app.disable("x-powered-by");
 app.use(express.json({ limit: "32kb" }));
 
-// Health check does not touch orders, so it stays useful when orders are slow or broken.
+// health does not touch orders, so it still answers when orders are broken
 app.get("/health", (req, res) => {
   res.status(200).json({
     status: "ok",

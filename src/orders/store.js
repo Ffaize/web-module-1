@@ -1,5 +1,4 @@
-// In-memory storage. Orders live only while the process runs.
-// Knows nothing about HTTP or validation.
+// orders live in memory and disappear after restart
 const orders = [];
 
 function add(order) {

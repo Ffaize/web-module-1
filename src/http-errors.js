@@ -1,5 +1,3 @@
-// JSON error format shared by all routes, plus the 404 and error handlers.
-
 function validationProblem(message, details) {
   return {
     error: {
@@ -28,10 +26,9 @@ function routeNotFound(req, res) {
   });
 }
 
-// Express recognizes an error handler by its four arguments, so `next` stays.
-// eslint-disable-next-line no-unused-vars
+// express needs all 4 arguments to treat this as an error handler
 function errorHandler(error, req, res, next) {
-  // Malformed JSON from express.json() is a client error, not a server failure.
+  // broken JSON in the body is the client's fault -> 400
   if (error instanceof SyntaxError && error.status === 400 && "body" in error) {
     return res.status(400).json(
       validationProblem("Invalid JSON body", [
@@ -41,7 +38,7 @@ function errorHandler(error, req, res, next) {
   }
 
   console.error(error);
-  return res.status(500).json({
+  res.status(500).json({
     error: {
       code: "INTERNAL_ERROR",
       message: "Unexpected server error",
