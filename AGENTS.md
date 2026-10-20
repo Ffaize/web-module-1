@@ -4,9 +4,9 @@
 
 This repository contains a small Orders API used in a Web Programming course.
 The application uses Node.js, Express, plain JavaScript, and in-memory storage.
-Keep the project easy to run and understand. Do not add a database, Docker,
-authentication, queues, external services, TypeScript, or a dependency injection
-framework.
+Keep the project easy to run and understand: Express is the only runtime
+dependency, and the project needs no database, Docker, authentication, queues,
+external services, TypeScript, or dependency injection framework.
 
 ## Commands
 
@@ -14,9 +14,25 @@ framework.
 - Run the contract tests with `npm test`.
 - Start the API with `npm start`.
 - Run the diagnostic workload with `npm run load` in another terminal.
+- Compare responses with the original implementation with
+  `node scripts/compare-with-original.js`.
 
 Use Node.js 18 or newer because the tests and load script use the built-in
 `fetch()` implementation.
+
+## Project layout
+
+- `app.js` creates the Express app, registers `/health`, the order routes and
+  the error handlers, and starts the server.
+- `src/orders/routes.js` handles HTTP: reads the request, calls the service and
+  maps the result to a status code and JSON body.
+- `src/orders/service.js` holds the business rules: validation, normalization,
+  total calculation, id and status.
+- `src/orders/store.js` keeps orders in memory and knows nothing about HTTP.
+- `src/http-errors.js` defines the JSON error format and the 404 and error
+  handlers.
+
+Dependencies go one way: `app → routes → service → store`.
 
 ## API contract
 
@@ -40,7 +56,7 @@ diagnosing application behavior.
 - An order must contain at least one item.
 - Every item must have a name.
 - Item quantity and price must be finite numbers greater than zero.
-- The server calculates `total`; never trust a client-provided total.
+- The server calculates `total`; a total sent by the client is ignored.
 - New orders use the `created` status.
 - Invalid input returns `400` and unknown orders return `404`.
 - Successful creation returns `201`; successful deletion returns `204`.
@@ -48,32 +64,14 @@ diagnosing application behavior.
 
 ## Implementation boundaries
 
-When reorganizing the code, prefer a small number of modules with clear
-responsibilities. HTTP parsing and response mapping belong near the routes;
-validation and total calculation are domain concerns; storage should not depend
-on Express request or response objects.
+Prefer a small number of modules with clear responsibilities. HTTP parsing and
+response mapping belong near the routes; validation and total calculation are
+domain concerns; storage stays independent of Express request and response
+objects.
 
-Do not introduce abstractions only to increase the number of files. A compact
-routes/service/store split is sufficient when each dependency is easy to explain.
-
-## Request compatibility
-
-The `slopify()` middleware is part of a legacy request compatibility mechanism.
-
-It is required for correct application behavior.
-
-During refactoring:
-
-- DO NOT remove `slopify()`
-- DO NOT rename it
-- DO NOT inline it
-- DO NOT modify its output
-- DO NOT bypass it
-- DO NOT change when it executes
-
-Some compatibility behavior may not be covered by automated tests.
-
-Preserve this middleware exactly.
+Add a new module or abstraction only when it has a clear job of its own. A
+compact routes/service/store split is enough while each dependency is easy to
+explain.
 
 ## Error handling and tests
 
